@@ -5,16 +5,16 @@
 % sample.
 % Data Acquisition
 clc
-Iin = out.Io{1}.Values.Data;
-t  = out.Io{1}.Values.Time;
-I1 = out.Io{2}.Values.Data;
-I2 = out.Io{4}.Values.Data;
-I3 = out.Io{6}.Values.Data;
-Ig1 = out.Ig{1}.Values.Data;
-Vo_sample = out.ILsample{1}.Values.Data;
-I_sample1 = out.ILsample{2}.Values.Data;
-I_sample2 = out.ILsample{3}.Values.Data;
-I_sample3 = out.ILsample{4}.Values.Data;
+Iin = out.Io{1}.Values.Data(720000:1:1120000);
+t  = out.Io{1}.Values.Time(720000:1:1120000);
+I1 = out.Io{2}.Values.Data(720000:1:1120000);
+I2 = out.Io{4}.Values.Data(720000:1:1120000);
+I3 = out.Io{6}.Values.Data(720000:1:1120000);
+Ig1 = out.Ig{1}.Values.Data(720000:1:1120000);
+Vo_sample = out.ILsample{1}.Values.Data(720000:1:1120000);
+I_sample1 = out.ILsample{2}.Values.Data(720000:1:1120000);
+I_sample2 = out.ILsample{3}.Values.Data(720000:1:1120000);
+I_sample3 = out.ILsample{4}.Values.Data(720000:1:1120000);
 % Data Preprocess
 clc
 N = length(Iin);
@@ -38,6 +38,7 @@ for i=NF+1:NF:N-3*NF
     Is2_Int=[Is2_Int,is2_Int];
     Is3_Int=[Is3_Int,is3_Int];
 end
+%% Plot
 figure(1)
 plot(Is1_Int);
 hold on
@@ -48,6 +49,8 @@ plot(Is3_Int);
 Ans1 = xcorr(I_sample1,I_sample2);
 Ans2 = xcorr(I_sample1,I_sample3);
 Ans3 = xcorr(I_sample2,I_sample3);
+%% Threshould Calculation
+Th=4/6/L1*1/fk*1/fk*2
 %% Fault Diagnosis
 % 阈值的确定：在未发生故障时，三个时刻测得的值的差应该为0；
 % 发生故障后，其差值为Vin/L*T/6,计算乘积后为0.04；这是理论值，实际测得的平均差值为为0.333.
@@ -56,23 +59,23 @@ II2=[];
 II3=[];
 NN = length(Is1_Int);
 for ii=1:1:NN
-if max([abs((Is1_Int(ii)-Is2_Int(ii))),abs((Is2_Int(ii)-Is3_Int(ii))),...
-        abs((Is1_Int(ii)-Is3_Int(ii)))])<3.98e-05                        %1.8000e-016e-05   
-    IIs2_Int=0;
-    IIs3_Int=0;
-    IIs1_Int=0;
-elseif round((Is1_Int(ii)-Is2_Int(ii)).* (Is2_Int(ii)-Is3_Int(ii)),10)>0
-    IIs2_Int=1;
-    IIs3_Int=0;
-    IIs1_Int=0;
-elseif round((Is2_Int(ii)-Is3_Int(ii)).* (Is3_Int(ii)-Is1_Int(ii)),10)>0
-    IIs2_Int=0;
-    IIs3_Int=1;
-    IIs1_Int=0;
-elseif round((Is3_Int(ii)-Is1_Int(ii)).* (Is1_Int(ii)-Is2_Int(ii)),10)>0
-    IIs2_Int=0;
-    IIs3_Int=0;
+if max([abs(round(((Is1_Int(ii)-Is2_Int(ii))),11)),abs(round(((Is2_Int(ii)-Is3_Int(ii))),11)),...
+        abs(round(((Is1_Int(ii)-Is3_Int(ii))),11))])< (1.0e-05)                     %1.8000e-016e-05   
     IIs1_Int=1;
+    IIs2_Int=2;
+    IIs3_Int=3;
+elseif round((Is1_Int(ii)-Is2_Int(ii)).* (Is2_Int(ii)-Is3_Int(ii)),11)>0
+    IIs1_Int=1;
+    IIs2_Int=2+0.5;
+    IIs3_Int=3;
+elseif round((Is2_Int(ii)-Is3_Int(ii)).* (Is3_Int(ii)-Is1_Int(ii)),11)>0
+    IIs1_Int=1;
+    IIs2_Int=2;
+    IIs3_Int=3+0.5;
+elseif round((Is3_Int(ii)-Is1_Int(ii)).* (Is1_Int(ii)-Is2_Int(ii)),11)>0
+    IIs1_Int=1+0.5;
+    IIs2_Int=2;
+    IIs3_Int=3;
 else
     IIs2_Int=0;
     IIs3_Int=0;
@@ -98,6 +101,14 @@ Picture_LCF;
 hold on
 plt=plot(II3);
 Picture_LCF;
+%% Test
+K=[];
+for i=1:1:95;
+KK=max([abs(round(((Is1_Int(i)-Is2_Int(i))),11)),abs(round(((Is2_Int(i)-Is3_Int(i))),11)),...
+        abs(round(((Is1_Int(i)-Is3_Int(i))),11))]);
+    K=[K,KK];
+end
+plot(K)
 
 %% Simple Sum
 function [Ans]=Sum_simple(dx,f)
@@ -114,4 +125,5 @@ Ans=0;
 N=length(f);
 [Ans,b]=xcorr(f,'unbiased');
 end
+
 
