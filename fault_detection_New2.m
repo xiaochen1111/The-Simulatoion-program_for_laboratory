@@ -49,7 +49,7 @@ II3=[];
 NN = length(Is1_Int);
 for ii=1:1:NN
 if max([abs((Is1_Int(ii)-Is2_Int(ii))),abs((Is2_Int(ii)-Is3_Int(ii))),...
-        abs((Is1_Int(ii)-Is3_Int(ii)))])<3.0e-05                          %1.8000e-01
+        abs((Is1_Int(ii)-Is3_Int(ii)))])<1.09e-07                          %1.8000e-01
     IIs2_Int=0;
     IIs3_Int=0;
     IIs1_Int=0;

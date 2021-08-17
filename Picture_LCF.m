@@ -22,9 +22,9 @@ set(gca,'FontSize',15);
 xlabel('Time(s)','FontSize',15,'LineWidth',8)                                           % set the label of  x axis 
 set(gca,'FontName','Helvetica');                                           %设置所有字体大小为18号，字体为Helverica
 set(gca,'linewidth',1.5);                                                  %设置图框的线宽1.5
-set(gcf,'position',[0 0 650 400]);                                         %设置画幅大小为横650*纵450
-% set(gca,'XLim',[0,0.02])                                                  %设置y轴的范围
-% set(gca,'xticklabel',{'0.0','0.005','0.01','0.015','0.02'});      %设置x轴的label
+set(gcf,'position',[0 0 650 500]);                                         %设置画幅大小为横650*纵450
+% set(gca,'XLim',[0,0.02])                                                 %设置y轴的范围
+% set(gca,'xticklabel',{'0.0','0.005','0.01','0.015','0.02'});             %设置x轴的label
 % set(gca,'yticklabel',{'1.0','1.5','2.0','2.5','3.0','3.5'});             %设置y轴的label
 % set(gca,'ytick',0:100:2500)
 grid on                                                                    %设置网格线                                   

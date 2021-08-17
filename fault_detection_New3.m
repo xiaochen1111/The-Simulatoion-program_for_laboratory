@@ -5,16 +5,17 @@
 % sample.
 % Data Acquisition
 clc
-Iin = out.Io{1}.Values.Data(720000:1:1120000);
-t  = out.Io{1}.Values.Time(720000:1:1120000);
-I1 = out.Io{2}.Values.Data(720000:1:1120000);
-I2 = out.Io{4}.Values.Data(720000:1:1120000);
-I3 = out.Io{6}.Values.Data(720000:1:1120000);
-Ig1 = out.Ig{1}.Values.Data(720000:1:1120000);
-Vo_sample = out.ILsample{1}.Values.Data(720000:1:1120000);
-I_sample1 = out.ILsample{2}.Values.Data(720000:1:1120000);
-I_sample2 = out.ILsample{3}.Values.Data(720000:1:1120000);
-I_sample3 = out.ILsample{4}.Values.Data(720000:1:1120000);
+NN=320000:1:800000;
+Iin = out.Io{1}.Values.Data(NN);
+t  = out.Io{1}.Values.Time(NN);
+I1 = out.Io{2}.Values.Data(NN);
+I2 = out.Io{4}.Values.Data(NN);
+I3 = out.Io{6}.Values.Data(NN);
+Ig1 = out.Ig{1}.Values.Data(NN);
+Vo_sample = out.ILsample{1}.Values.Data(NN);
+I_sample1 = out.ILsample{2}.Values.Data(NN);
+I_sample2 = out.ILsample{3}.Values.Data(NN);
+I_sample3 = out.ILsample{4}.Values.Data(NN);
 % Data Preprocess
 clc
 N = length(Iin);
@@ -60,7 +61,7 @@ II3=[];
 NN = length(Is1_Int);
 for ii=1:1:NN
 if max([abs(round(((Is1_Int(ii)-Is2_Int(ii))),11)),abs(round(((Is2_Int(ii)-Is3_Int(ii))),11)),...
-        abs(round(((Is1_Int(ii)-Is3_Int(ii))),11))])< (1.0e-05)                     %1.8000e-016e-05   
+        abs(round(((Is1_Int(ii)-Is3_Int(ii))),11))])< (1.33333e-06)                     %1.8000e-016e-05   
     IIs1_Int=1;
     IIs2_Int=2;
     IIs3_Int=3;

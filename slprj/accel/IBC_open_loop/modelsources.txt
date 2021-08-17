@@ -1,2 +1,0 @@
-  IBC_open_loop_acc.c
-
